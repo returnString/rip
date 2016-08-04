@@ -62,27 +62,25 @@ restore <- function()
 install <- function()
 {
 	assertPwd(T)
-	package <- args[2]
-	
-	if (is.na(package))
-	{
-		stop("Please specify a package")
-	}
+	packagesToInstall <- args[0:-1]
 
-	if (!(package %in% available.packages()[,"Package"]))
+	if (!length(packagesToInstall))
 	{
-		stop("Package is not available in the repository: ", package)
+		stop("Please specify at least one package")
 	}
 
 	packages <- loadPackages()
-	if (package %in% packages)
+
+	for (package in packagesToInstall)
 	{
-		stop("Package is already installed: ", package)
+		if (!(package %in% available.packages()[,"Package"]))
+		{
+			stop("Package is not available in the repository: ", package)
+		}
 	}
 
-	info("Installing package: ", package)
-	quietInstall(package)
-	savePackages(c(packages, package))
+	quietInstall(packagesToInstall)
+	savePackages(union(packages, packagesToInstall))
 }
 
 init <- function()
