@@ -1,0 +1,2 @@
+#!/usr/bin/env RScript
+source("./rip.r")
