@@ -7,6 +7,11 @@ options(repos = repoConfig)
 manifestName <- '.rip'
 args <- commandArgs(trailingOnly = T)
 
+info <- function(...)
+{
+	cat(paste0(...), "\n")
+}
+
 assertPwd <- function(isRipProject)
 {
 	if (isRipProject != file.exists(manifestName))
@@ -34,17 +39,24 @@ savePackages <- function(packages)
 	close(fh)
 }
 
+quietInstall <- function(packages)
+{
+	install.packages(packages, verbose = F, quiet = T)
+}
+
 restore <- function()
 {
 	assertPwd(T)
 	packages <- loadPackages()
+	packageCount <- length(packages)
 
-	if (!length(packages))
+	if (!packageCount)
 	{
 		stop("No packages in manifest to restore")
 	}
 
-	install.packages(packages)
+	info("Restoring ", packageCount, " package(s)")
+	quietInstall(packages)
 }
 
 install <- function()
@@ -68,7 +80,8 @@ install <- function()
 		stop("Package is already installed: ", package)
 	}
 
-	install.packages(package)
+	info("Installing package: ", package)
+	quietInstall(package)
 	savePackages(c(packages, package))
 }
 
@@ -86,7 +99,7 @@ list <- function()
 	for (package in packages)
 	{
 		version <- packageVersion(package)
-		print(paste(package, version))
+		info(package, ": ", version)
 	}
 }
 
