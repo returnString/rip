@@ -11,7 +11,7 @@ assertPwd <- function(isRipProject)
 {
 	if (isRipProject != file.exists(manifestName))
 	{
-		stop(paste("Current directory", if (isRipProject) "is not" else "is already" , "a rip project"))
+		stop("Current directory ", if (isRipProject) "is not" else "is already" , " a rip project")
 	}
 }
 
@@ -59,13 +59,13 @@ install <- function()
 
 	if (!(package %in% available.packages()[,"Package"]))
 	{
-		stop("Package is not available in the repository")
+		stop("Package is not available in the repository: ", package)
 	}
 
 	packages <- loadPackages()
 	if (package %in% packages)
 	{
-		stop("Package is already installed")
+		stop("Package is already installed: ", package)
 	}
 
 	install.packages(package)
@@ -78,18 +78,14 @@ init <- function()
 	file.create(manifestName)
 }
 
-invalidCommand <- function()
-{
-	stop("Invalid command")
-}
-
 main <- function()
 {
-	command <- switch(args[1],
+	commandName <- args[1]
+	command <- switch(commandName,
 		init = init,
 		install = install,
 		restore = restore,
-		invalidCommand)
+		stop("Invalid command: ", commandName))
 
 	command()
 }
