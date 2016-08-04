@@ -78,6 +78,18 @@ init <- function()
 	file.create(manifestName)
 }
 
+list <- function()
+{
+	assertPwd(T)
+	packages <- loadPackages()
+
+	for (package in packages)
+	{
+		version <- packageVersion(package)
+		print(paste(package, version))
+	}
+}
+
 main <- function()
 {
 	commandName <- args[1]
@@ -85,6 +97,7 @@ main <- function()
 		init = init,
 		install = install,
 		restore = restore,
+		list = list,
 		stop("Invalid command: ", commandName))
 
 	command()
