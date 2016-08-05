@@ -89,7 +89,7 @@ init <- function()
 	file.create(manifestName)
 }
 
-list <- function()
+listVersions <- function()
 {
 	assertPwd(T)
 	packages <- loadPackages()
@@ -101,6 +101,28 @@ list <- function()
 	}
 }
 
+help <- function(commandName = NA)
+{
+	if (!is.na(commandName))
+	{
+		info("Invalid command: ", commandName, "\n")
+	}
+
+	commands <- list(
+		init = "initialises an empty manifest",
+		install = "installs one or more packages and records them in your manifest",
+		restore = "installs all packages referenced in your manifest",
+		list = "displays a list of currently installed packages with their versions")
+
+	output = paste0("rip ", names(commands), "\n  ", commands, "\n")
+
+	info("Usage:\n")
+	for (command in output)
+	{
+		info(command)
+	}
+}
+
 main <- function()
 {
 	commandName <- args[1]
@@ -108,8 +130,9 @@ main <- function()
 		init = init,
 		install = install,
 		restore = restore,
-		list = list,
-		stop("Invalid command: ", commandName))
+		list = listVersions,
+		"-h" = , "--help" = , help = help,
+		function() { help(commandName) })
 
 	command()
 }
