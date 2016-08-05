@@ -135,4 +135,4 @@ main <- function()
 	command()
 }
 
-main()
+dummy <- main()
