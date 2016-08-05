@@ -1,5 +1,3 @@
-#!/usr/bin/env RScript
-
 repoConfig <- getOption("repos")
 repoConfig["CRAN"] = "http://cran.r-project.org/"
 options(repos = repoConfig)
