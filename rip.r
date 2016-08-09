@@ -1,5 +1,18 @@
+sourceResult <- tryCatch({ source("~/.ripconfig") },
+	error = function(e){}, warning = function(e){})
+
+if (!exists("RIPCONFIG_CRAN_PATH"))
+{
+	RIPCONFIG_CRAN_PATH = "http://cran.r-project.org/"
+}
+
+if (!exists("RIPCONFIG_LIB_PATH"))
+{
+	RIPCONFIG_LIB_PATH = .libPaths()[1]
+}
+
 repoConfig <- getOption("repos")
-repoConfig["CRAN"] = "http://cran.r-project.org/"
+repoConfig["CRAN"] = RIPCONFIG_CRAN_PATH
 options(repos = repoConfig)
 
 manifestName <- '.rip'
@@ -39,7 +52,7 @@ savePackages <- function(packages)
 
 quietInstall <- function(packages)
 {
-	install.packages(packages, verbose = F, quiet = T)
+	install.packages(packages, verbose = F, quiet = T, lib = RIPCONFIG_LIB_PATH)
 }
 
 restore <- function()
